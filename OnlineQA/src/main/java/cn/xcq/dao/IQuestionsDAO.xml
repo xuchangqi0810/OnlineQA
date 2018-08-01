@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:接口绝对路径-->
+<mapper namespace="cn.xcq.dao.IQuestionsDAO">
+
+    <resultMap id="Question" type="cn.xcq.entity.Questions">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="detailDesc" property="detailDesc"/>
+        <result column="answerCount" property="answerCount"/>
+        <result column="lastModified" property="lastModified"/>
+        <result column="lastModified" property="lastModified"/>
+        <collection  property="answerss"  ofType="Answers" select="getAllAnsContent" column="id"></collection>
+    </resultMap>
+
+    <select id="getAllAnsContent" resultType="Answers">
+        select ansContent,ansDate from answers WHERE  qid=#{id}
+    </select>
+    
+    <!--01.查询所有问答信息-->
+    <select id="findAllQuestions" resultMap="Question">
+        SELECT * from questions
+    </select>
+
+
+    <!--01.查询所有问答信息-->
+    <select id="findByIdQuestion" resultMap="Question">
+        SELECT * from questions WHERE id=#{qid}
+    </select>
+
+    <insert id="AddAnswer" >
+        INSERT INTO answers(id,ansContent,ansDate,qid)VALUES(DEFAULT ,#{ansContent},#{ansDate},#{qid})
+    </insert>
+
+
+    <insert id="AddQuestion">
+        INSERT INTO questions(id,title,detailDesc,answerCount,lastModified)VALUES(DEFAULT ,#{title},#{detailDesc},#{answerCount},#{lastModified})
+    </insert>
+
+    <update id="updateQuestion">
+        UPDATE questions SET answerCount=answerCount+1,lastModified=#{1} WHERE id=#{0}
+    </update>
+
+
+</mapper>
